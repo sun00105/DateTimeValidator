@@ -21,10 +21,10 @@ This program reads a large list of date-time values from a file and writes to a 
 4. Run the application, providing input and output file paths as command-line arguments.
 
     ```sh
-    java -cp src main.DateTimeValidator "inputFilePath.txt" "outputFilePath.txt"
+    java -cp src main.DateTimeValidator <inputFilePath.txt> <outputFilePath.txt>
     ```
 
-   Replace `"inputFilePath.txt"` with the path to your input file containing date-time strings, and `"outputFilePath.txt"` with the desired output file path.
+   Replace `<inputFilePath.txt>` with the path to your input file containing date-time strings, and `<outputFilePath.txt>` with the desired output file path.
 
 ## Example Usage
 
