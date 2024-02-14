@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,6 +76,86 @@ public class DateTimeValidatorTest {
         // Cleanup
         Files.delete(sourceFilename);
         Files.delete(destinationFile);
+    }
+
+    /**
+     * Check only unique valid date times are stored in the destination file.
+     * @throws Exception if the DatetimeValidator failed
+     */
+    @Test
+    public void testDuplicateDatesRemoved() throws Exception {
+        // Create a temporary source and destination file
+        Path sourceFile = Files.createTempFile("inputFile", ".txt");
+        Path destinationFile = Files.createTempFile("outputFile", ".txt");
+
+        try {
+            // Write duplicate date-time strings to the temporary source file
+            Files.write(sourceFile, List.of(
+                    "2022-01-01T12:00:00Z", // repeated
+                    "2022-01-01T12:00:00Z", // repeated
+                    "2022-02-01T15:30:00Z"
+            ));
+
+            // Create an instance of the DataTimeValidator class
+            // Invoke the fileProcessor method to process source file and writes the result to the destination file.
+            DateTimeValidator dateTimeValidator = new DateTimeValidator();
+            dateTimeValidator.fileProcessor(sourceFile.toString(), destinationFile.toString());
+
+            // Read the result from the destination file
+            List<String> resultLines = Files.readAllLines(destinationFile);
+
+            // Assert that duplicate dates are removed
+            assertEquals(2, resultLines.size());
+            assertEquals("2022-01-01T12:00:00Z", resultLines.get(0));
+            assertEquals("2022-02-01T15:30:00Z", resultLines.get(1));
+        } finally {
+            // Clean up: delete temporary files
+            Files.deleteIfExists(sourceFile);
+            Files.deleteIfExists(destinationFile);
+        }
+    }
+
+    /**
+     * Check only valid date times are stored in the destination file.
+     * @throws Exception if the DatetimeValidator failed
+     */
+    @Test
+    public void testInvalidDatesRemoved() throws Exception {
+        // Create a temporary source and destination file
+        Path sourceFile = Files.createTempFile("inputFile", ".txt");
+        Path destinationFile = Files.createTempFile("outputFile", ".txt");
+
+        try {
+            // Write duplicate date-time strings to the temporary source file
+            Files.write(sourceFile, List.of(
+                    "2023-01-01 00:00:00Z", // Invalid separator between date and time
+                    "2023-00-01T00:00:00Z", // Invalid month
+                    "2023-01-32T00:00:00Z", // Invalid date
+                    "24:00:00Z",  // missing date
+                    "2022-11-30T24:01:01Z", //
+                    "2023-01-01T00:00:00+24:00", // Invalid time zone offset
+                    "2023-01-01T00:00:00+00:60",  // Invalid time zone minutes
+                    "2022-02-01T15:30:00Z", // Valid datetime
+                    "Invalid-Date-Time", // Invalid datetime
+                    "2023-01-01T00:00:00Z12:00"  // Misplaced 'Z'
+            ));
+
+            // Create an instance of the DataTimeValidator class
+            // Invoke the fileProcessor method to process source file and writes the result to the destination file.
+            DateTimeValidator dateTimeValidator = new DateTimeValidator();
+            dateTimeValidator.fileProcessor(sourceFile.toString(), destinationFile.toString());
+
+            // Read the result from the destination file
+            List<String> resultLines = Files.readAllLines(destinationFile);
+
+            // Assert that duplicate dates are removed
+            assertEquals(1, resultLines.size());
+            assertEquals("2022-02-01T15:30:00Z", resultLines.get(0));
+        } finally {
+            // Clean up: delete temporary files
+            Files.deleteIfExists(sourceFile);
+            Files.deleteIfExists(destinationFile);
+        }
     }
 
     /**
