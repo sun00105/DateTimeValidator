@@ -101,7 +101,12 @@ public class DateTimeValidator {
         // Assign the second command-line argument to destinationPath
         String destinationPath = args[1];
 
+        long startTime = System.currentTimeMillis();
         fileProcessor(sourcePath, destinationPath);
+        long endTime = System.currentTimeMillis();
+
+        long elapsedTime = endTime - startTime;
+        System.out.println("Time taken to process " + sourcePath + ": " + elapsedTime + " milliseconds");
 
     }
 }
