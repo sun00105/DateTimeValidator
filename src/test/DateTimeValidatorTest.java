@@ -307,8 +307,8 @@ public class DateTimeValidatorTest {
         DateTimeValidator.main(args);
 
         // Assert on the output
-        String expectedOutput = "";
-        assertEquals(expectedOutput, outContent.toString().trim());
+        String actualOutput = outContent.toString().trim();
+        assertTrue(actualOutput.matches(".*Time taken to process input.txt: \\d+ milliseconds.*"));
     }
 
     /**
