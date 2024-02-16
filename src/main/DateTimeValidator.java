@@ -45,8 +45,8 @@ public class DateTimeValidator {
             if (second < 0 || second > 59)
                 return false;
 
-            // Check time Zone formatting "Thh:mm:ssZ"
-            if (!timeZone.equals("Z") && !timeZone.matches("[-+][0-1][0-9]:[0-5][0-9]:[0-5][0-9]") && !timeZone.matches("[-+]2[0-3]:[0-5][0-9]:[0-5][0-9]")) {
+            // Check time Zone formatting Z or "+-hh:mm"
+            if (!timeZone.equals("Z") && !timeZone.matches("[-+](([0-1][0-2]|[0][0-9]):[0-5][0-9])") && !timeZone.matches("[-+](14:00)") ) {
                 return false;
             }
 

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -304,7 +305,8 @@ public class DateTimeValidatorTest {
     public void testMainMethodWithValidArguments() {
         String[] args = {"input.txt", "output.txt"};
 
-        DateTimeValidator.main(args);
+        DateTimeValidator dateTimeValidator = new DateTimeValidator();
+        dateTimeValidator.main(args);
 
         // Assert on the output
         String actualOutput = outContent.toString().trim();
