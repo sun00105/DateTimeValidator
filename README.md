@@ -2,6 +2,12 @@
 
 This program reads a large list of date-time values from a file and writes to a separate file the list of unique, valid date-time values (no duplicates). A valid date-time value matches the following format (ISO 8601): YYYY-MM-DDThh:mm:ssTZD
 
+## Assumptions
+* Valid ISO 8601 Format
+* No Semantic Validation
+* Exact String Match for Uniqueness
+* No Dependency on High-Level Libraries
+
 ## How to Run the Code
 
 1. Open a command prompt or terminal.
